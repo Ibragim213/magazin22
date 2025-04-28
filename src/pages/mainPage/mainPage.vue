@@ -1,6 +1,51 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import AppFooter from '@/components/footer/appFooter.vue'
 import AppHeader from '@/components/header/appHeader.vue'
+
+const currentPage = ref(0)
+const pages = ref([
+  [
+    { name: 'Ежик с яблоком', price: '1200 р.' },
+    { name: 'Ежик с яблоком', price: '1200 р.' },
+    { name: 'Ежик с яблоком', price: '1200 р.' },
+    { name: 'Ежик с яблоком', price: '1200 р.' },
+    { name: 'Ежик с яблоком', price: '1200 р.' },
+    { name: 'Ежик с яблоком', price: '1200 р.' },
+  ],
+  [
+    { name: 'Заяц с морковкой', price: '1500 р.' },
+    { name: 'Заяц с морковкой', price: '1500 р.' },
+    { name: 'Заяц с морковкой', price: '1500 р.' },
+    { name: 'Заяц с морковкой', price: '1500 р.' },
+    { name: 'Заяц с морковкой', price: '1500 р.' },
+    { name: 'Заяц с морковкой', price: '1500 р.' },
+  ],
+  [
+    { name: 'Мишка с шариком', price: '1000 р.' },
+    { name: 'Мишка с шариком', price: '1000 р.' },
+    { name: 'Мишка с шариком', price: '1000 р.' },
+    { name: 'Мишка с шариком', price: '1000 р.' },
+    { name: 'Мишка с шариком', price: '1000 р.' },
+    { name: 'Мишка с шариком', price: '1000 р.' },
+  ],
+  [
+    { name: 'Лиса с вишней', price: '1000 р.' },
+    { name: 'Лиса с вишней', price: '1800 р.' },
+    { name: 'Лиса с вишней', price: '1300 р.' },
+    { name: 'Лиса с вишней', price: '1700 р.' },
+    { name: 'Лиса с вишней', price: '1100 р.' },
+    { name: 'Лиса с вишней', price: '1800 р.' },
+  ],
+])
+
+const nextPage = () => {
+  currentPage.value = (currentPage.value + 1) % pages.value.length
+}
+
+const setPage = (index) => {
+  currentPage.value = index
+}
 </script>
 
 <template>
@@ -13,7 +58,9 @@ import AppHeader from '@/components/header/appHeader.vue'
         <p>Россия, Ростов-на-Дону</p>
       </div>
       <div class="hero-image">
-        <div class="placeholder"></div>
+        <div class="placeholder">
+          <img src="/src/assets/img/images.jpeg" alt="Изображение игрушки" />
+        </div>
       </div>
     </section>
   </main>
@@ -21,148 +68,26 @@ import AppHeader from '@/components/header/appHeader.vue'
   <section class="catalog">
     <h2>Каталог</h2>
     <p>Здесь представлены лучшие товары, которые вы можете заказать, заполнив анкету.</p>
-    <div class="catalog-items container" id="catalog-items">
-      <!-- Первая страница -->
-      <div class="catalog-page" id="page1">
-        <div class="catalog-item">
-          <div class="placeholder"></div>
-          <p>Мишка с шариком</p>
-          <button>1000 р.</button>
-        </div>
-        <div class="catalog-item">
-          <div class="placeholder"></div>
-          <p>Мишка с шариком</p>
-          <button>1000 р.</button>
-        </div>
-        <div class="catalog-item">
-          <div class="placeholder"></div>
-          <p>Мишка с шариком</p>
-          <button>1000 р.</button>
-        </div>
-        <div class="catalog-item">
-          <div class="placeholder"></div>
-          <p>Мишка с шариком</p>
-          <button>1000 р.</button>
-        </div>
-        <div class="catalog-item">
-          <div class="placeholder"></div>
-          <p>Мишка с шариком</p>
-          <button>1000 р.</button>
-        </div>
-        <div class="catalog-item">
-          <div class="placeholder"></div>
-          <p>Мишка с шариком</p>
-          <button>1000 р.</button>
-        </div>
-      </div>
-      <!-- Вторая страница -->
-      <div class="catalog-page" id="page2" style="display: none">
-        <div class="catalog-item">
-          <div class="placeholder"></div>
-          <p>Заяц с морковкой</p>
-          <button>1500 р.</button>
-        </div>
-        <div class="catalog-item">
-          <div class="placeholder"></div>
-          <p>Заяц с морковкой</p>
-          <button>1500 р.</button>
-        </div>
-        <div class="catalog-item">
-          <div class="placeholder"></div>
-          <p>Заяц с морковкой</p>
-          <button>1500 р.</button>
-        </div>
-        <div class="catalog-item">
-          <div class="placeholder"></div>
-          <p>Заяц с морковкой</p>
-          <button>1500 р.</button>
-        </div>
-        <div class="catalog-item">
-          <div class="placeholder"></div>
-          <p>Заяц с морковкой</p>
-          <button>1500 р.</button>
-        </div>
-        <div class="catalog-item">
-          <div class="placeholder"></div>
-          <p>Заяц с морковкой</p>
-          <button>1500 р.</button>
-        </div>
-      </div>
-      <!-- Третья страница -->
-      <div class="catalog-page" id="page3" style="display: none">
-        <div class="catalog-item">
-          <div class="placeholder"></div>
-          <p>Ежик с яблоком</p>
-          <button>1200 р.</button>
-        </div>
-        <div class="catalog-item">
-          <div class="placeholder"></div>
-          <p>Ежик с яблоком</p>
-          <button>1200 р.</button>
-        </div>
-        <div class="catalog-item">
-          <div class="placeholder"></div>
-          <p>Ежик с яблоком</p>
-          <button>1200 р.</button>
-        </div>
-        <div class="catalog-item">
-          <div class="placeholder"></div>
-          <p>Ежик с яблоком</p>
-          <button>1200 р.</button>
-        </div>
-        <div class="catalog-item">
-          <div class="placeholder"></div>
-          <p>Ежик с яблоком</p>
-          <button>1200 р.</button>
-        </div>
-        <div class="catalog-item">
-          <div class="placeholder"></div>
-          <p>Ежик с яблоком</p>
-          <button>1200 р.</button>
-        </div>
-      </div>
-      <!-- Четвертая страница -->
-      <div class="catalog-page" id="page4" style="display: none">
-        <div class="catalog-item">
-          <div class="placeholder"></div>
-          <p>Лиса с вишней</p>
-          <button>1800 р.</button>
-        </div>
-        <div class="catalog-item">
-          <div class="placeholder"></div>
-          <p>Лиса с вишней</p>
-          <button>1800 р.</button>
-        </div>
-        <div class="catalog-item">
-          <div class="placeholder"></div>
-          <p>Лиса с вишней</p>
-          <button>1800 р.</button>
-        </div>
-        <div class="catalog-item">
-          <div class="placeholder"></div>
-          <p>Лиса с вишней</p>
-          <button>1800 р.</button>
-        </div>
-        <div class="catalog-item">
-          <div class="placeholder"></div>
-          <p>Лиса с вишней</p>
-          <button>1800 р.</button>
-        </div>
-        <div class="catalog-item">
-          <div class="placeholder"></div>
-          <p>Лиса с вишней</p>
-          <button>1800 р.</button>
-        </div>
+    <div class="catalog-items container">
+      <div class="catalog-item" v-for="(item, index) in pages[currentPage]" :key="index">
+        <div class="placeholder"></div>
+        <p>{{ item.name }}</p>
+        <button>{{ item.price }}</button>
       </div>
     </div>
     <div class="pagination">
-      <button id="page1-btn" class="active">1</button>
-      <button id="page2-btn">2</button>
-      <button id="page3-btn">3</button>
-      <button id="page4-btn">4</button>
-      <button id="next-btn">Дальше</button>
+      <button
+        v-for="(page, index) in pages"
+        :key="index"
+        :class="{ active: currentPage === index }"
+        @click="setPage(index)"
+      >
+        {{ index + 1 }}
+      </button>
+      <button @click="nextPage">Дальше</button>
     </div>
   </section>
+
   <section class="delivery">
     <div class="delivery-content container">
       <h2>Доставка и оплата</h2>
@@ -171,9 +96,9 @@ import AppHeader from '@/components/header/appHeader.vue'
         1. банковским переводом на наш расчётный счёт <br />
         2. банковским переводом с карты на карту <br />
         Информация по каждому способу оплаты предоставлена в форме при оформлении заказа, выбираете
-        удобный вам спосособ, ставите галочку, появляются необходимые реквизиты. Доставка: 1.
+        удобный вам способов, ставите галочку, появляются необходимые реквизиты. Доставка: 1.
         доставка курьером по СПб осуществляется по указанному в Вашей анкете адресу 2. доставка
-        курьером СДЕК из рук в руки по Ленобласти,а так же в 87 регионах РФ. 3. доставка в Пункты
+        курьером СДЕК из рук в руки по Ленобласти, а также в 87 регионах РФ. 3. доставка в Пункты
         Выдачи товаров СДЕК - самовывоз
         <a
           target="_blank"
@@ -184,14 +109,16 @@ import AppHeader from '@/components/header/appHeader.vue'
         >
       </p>
       <span>Доставка осуществляется на следующий день после вашей заявки.</span>
-
       <div class="but">
-        <button class="learn-more"><span>Подробнее</span></button>
+        <router-link to="/oplata">
+          <button class="learn-more"><span>Подробнее</span></button>
+        </router-link>
       </div>
     </div>
     <AppFooter />
   </section>
 </template>
+
 <style scoped>
 .hero {
   display: flex;
@@ -225,8 +152,17 @@ import AppHeader from '@/components/header/appHeader.vue'
 .placeholder {
   width: 379px;
   height: 420px;
-  background-color: #e0e0e0;
-  border: 1px solid #ddd;
+
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.placeholder img {
+  width: 100%;
+  height: auto;
   border-radius: 10px;
 }
 
@@ -277,26 +213,30 @@ import AppHeader from '@/components/header/appHeader.vue'
   justify-content: center;
 }
 
-.catalog-page {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
-}
-
 .catalog-item {
   text-align: center;
-  width: 300px;
+  width: calc(33.333% - 20px); /* 3 items per row */
+  box-sizing: border-box;
 }
 
-.placeholder {
-  width: 300px;
+.catalog-item .placeholder {
+  width: 100%;
   height: 300px;
   background-color: #e0e0e0;
   border: 1px solid #ddd;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   margin-bottom: 10px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.catalog-item .placeholder img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
 }
 
 .catalog-item button {
