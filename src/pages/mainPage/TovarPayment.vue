@@ -1,109 +1,190 @@
-<script setup lang="ts">
-import AppFooter from '@/components/footer/appFooter.vue'
-import AppHeader from '@/components/header/appHeader.vue'
-</script>
 <template>
   <AppHeader />
   <div class="new-page">
     <div class="catalog-items">
-      <div class="catalog-item">
-        <div class="placeholder"></div>
-        <p>Мишка с шариком</p>
-        <p>Размер: 7см</p>
-        <p>Цвет: Серый</p>
-        <p>Состав: Натуральная гипоаллергенная плюш</p>
-        <p>1000 р.</p>
-        <button class="learn-more">В корзину</button>
-      </div>
-      <div class="catalog-item">
-        <div class="placeholder"></div>
-        <p>Мишка с шариком</p>
-        <p>Размер: 7см</p>
-        <p>Цвет: Серый</p>
-        <p>Состав: Натуральная гипоаллергенная плюш</p>
-        <p>1000 р.</p>
-        <button class="learn-more">В корзину</button>
-      </div>
-      <div class="catalog-item">
-        <div class="placeholder"></div>
-        <p>Мишка с шариком</p>
-        <p>Размер: 7см</p>
-        <p>Цвет: Серый</p>
-        <p>Состав: Натуральная гипоаллергенная плюш</p>
-        <p>1000 р.</p>
-        <button class="learn-more">В корзину</button>
-      </div>
-    </div>
-  </div>
-  <div class="new-page">
-    <div class="catalog-items">
-      <div class="catalog-item">
-        <div class="placeholder"></div>
-        <p>Мишка с шариком</p>
-        <p>Размер: 7см</p>
-        <p>Цвет: Серый</p>
-        <p>Состав: Натуральная гипоаллергенная плюш</p>
-        <p>1000 р.</p>
-        <button class="learn-more">В корзину</button>
-      </div>
-      <div class="catalog-item">
-        <div class="placeholder"></div>
-        <p>Мишка с шариком</p>
-        <p>Размер: 7см</p>
-        <p>Цвет: Серый</p>
-        <p>Состав: Натуральная гипоаллергенная плюш</p>
-        <p>1000 р.</p>
-        <button class="learn-more">В корзину</button>
-      </div>
-      <div class="catalog-item">
-        <div class="placeholder"></div>
-        <p>Мишка с шариком</p>
-        <p>Размер: 7см</p>
-        <p>Цвет: Серый</p>
-        <p>Состав: Натуральная гипоаллергенная плюш</p>
-        <p>1000 р.</p>
-        <button class="learn-more">В корзину</button>
-      </div>
-    </div>
-  </div>
-  <div class="new-page">
-    <div class="catalog-items">
-      <div class="catalog-item">
-        <div class="placeholder"></div>
-        <p>Мишка с шариком</p>
-        <p>Размер: 7см</p>
-        <p>Цвет: Серый</p>
-        <p>Состав: Натуральная гипоаллергенная плюш</p>
-        <p>1000 р.</p>
-        <button class="learn-more">В корзину</button>
-      </div>
-      <div class="catalog-item">
-        <div class="placeholder"></div>
-        <p>Мишка с шариком</p>
-        <p>Размер: 7см</p>
-        <p>Цвет: Серый</p>
-        <p>Состав: Натуральная гипоаллергенная плюш</p>
-        <p>1000 р.</p>
-        <button class="learn-more">В корзину</button>
-      </div>
-      <div class="catalog-item">
-        <div class="placeholder"></div>
-        <p>Мишка с шариком</p>
-        <p>Размер: 7см</p>
-        <p>Цвет: Серый</p>
-        <p>Состав: Натуральная гипоаллергенная плюш</p>
-        <p>1000 р.</p>
-        <button class="learn-more">В корзину</button>
+      <div class="catalog-item" v-for="item in items" :key="item.id">
+        <img :src="item.image" alt="Item Image" class="item-image" />
+        <p>{{ item.name }}</p>
+        <p>Размер: {{ item.size }}</p>
+        <p>Цвет: {{ item.color }}</p>
+        <p>Состав: {{ item.material }}</p>
+        <p>{{ item.price }} р.</p>
+        <router-link
+          :to="{
+            name: 'ProductDetail',
+            params: { id: item.id },
+            query: { product: JSON.stringify(item) },
+          }"
+          class="learn-more-link"
+        >
+          <button class="learn-more">Подробнее</button>
+        </router-link>
+        <button
+          class="add-to-favorites"
+          @click="toggleFavorite(item)"
+          :class="{ favorited: isFavorite(item.id) }"
+        >
+          {{ isFavorite(item.id) ? 'Удалить из избранного' : 'Добавить в избранное' }}
+        </button>
+        <button class="add-to-cart" @click="addToCart(item)">Добавить в корзину</button>
       </div>
     </div>
   </div>
   <AppFooter />
 </template>
 
+<script setup lang="ts">
+import { computed } from 'vue'
+import { useStore } from 'vuex'
+import AppFooter from '@/components/footer/appFooter.vue'
+import AppHeader from '@/components/header/appHeader.vue'
+import bear1 from '@/assets/img/bear1.jpg'
+
+const store = useStore()
+
+const items = [
+  {
+    id: 1,
+    name: 'Мишка с шарфом',
+    price: '1000',
+    size: '7см',
+    color: 'Серый',
+    material: 'Натуральная гипоаллергенная плюш',
+    image: bear1,
+    description:
+      'Описание: Мишка Адель сшита из искусственного меха и вискозы. Мордочка вязаная из шерсти, тонирована вручную. Платье сшито из ситца, шитьё, декорировано атласным бантом. Единственный экземпляр, размер 7 см.',
+    characteristics: {
+      Модель: 'Мишка',
+      Вес: '0.2 кг',
+      Размер: '7 см',
+      Цвет: 'Серый',
+      Свойства: 'гипоаллергенный, экоматериалы',
+      Состав: 'натуральный гипоаллергенный плюш',
+      Наполнитель: 'холлофайбер, мягкое волокно',
+    },
+  },
+  {
+    id: 2,
+    name: 'Мишка с шарфом',
+    price: '10050',
+    size: '7см',
+    color: 'Серый',
+    material: 'Натуральная гипоаллергенная плюш',
+    image: bear1,
+    description:
+      'Описание: Мишка Адель сшита из искусственного меха и вискозы. Мордочка вязаная из шерсти, тонирована вручную. Платье сшито из ситца, шитьё, декорировано атласным бантом. Единственный экземпляр, размер 7 см.',
+    characteristics: {
+      Модель: 'Мишка',
+      Вес: '0.2 кг',
+      Размер: '7 см',
+      Цвет: 'Серый',
+      Свойства: 'гипоаллергенный, экоматериалы',
+      Состав: 'натуральный гипоаллергенный плюш',
+      Наполнитель: 'холлофайбер, мягкое волокно',
+    },
+  },
+  {
+    id: 3,
+    name: 'Мишка с шарфом',
+    price: '5000',
+    size: '7см',
+    color: 'Серый',
+    material: 'Натуральная гипоаллергенная плюш',
+    image: bear1,
+    description:
+      'Описание: Мишка Адель сшита из искусственного меха и вискозы. Мордочка вязаная из шерсти, тонирована вручную. Платье сшито из ситца, шитьё, декорировано атласным бантом. Единственный экземпляр, размер 7 см.',
+    characteristics: {
+      Модель: 'Мишка',
+      Вес: '0.2 кг',
+      Размер: '7 см',
+      Цвет: 'Серый',
+      Свойства: 'гипоаллергенный, экоматериалы',
+      Состав: 'натуральный гипоаллергенный плюш',
+      Наполнитель: 'холлофайбер, мягкое волокно',
+    },
+  },
+  {
+    id: 4,
+    name: 'Мишка с шарфом',
+    price: '7000',
+    size: '7см',
+    color: 'Серый',
+    material: 'Натуральная гипоаллергенная плюш',
+    image: bear1,
+    description:
+      'Описание: Мишка Адель сшита из искусственного меха и вискозы. Мордочка вязаная из шерсти, тонирована вручную. Платье сшито из ситца, шитьё, декорировано атласным бантом. Единственный экземпляр, размер 7 см.',
+    characteristics: {
+      Модель: 'Мишка',
+      Вес: '0.2 кг',
+      Размер: '7 см',
+      Цвет: 'Серый',
+      Свойства: 'гипоаллергенный, экоматериалы',
+      Состав: 'натуральный гипоаллергенный плюш',
+      Наполнитель: 'холлофайбер, мягкое волокно',
+    },
+  },
+  {
+    id: 5,
+    name: 'Мишка с шарфом',
+    price: '14000',
+    size: '7см',
+    color: 'Серый',
+    material: 'Натуральная гипоаллергенная плюш',
+    image: bear1,
+    description:
+      'Описание: Мишка Адель сшита из искусственного меха и вискозы. Мордочка вязаная из шерсти, тонирована вручную. Платье сшито из ситца, шитьё, декорировано атласным бантом. Единственный экземпляр, размер 7 см.',
+    characteristics: {
+      Модель: 'Мишка',
+      Вес: '0.2 кг',
+      Размер: '7 см',
+      Цвет: 'Серый',
+      Свойства: 'гипоаллергенный, экоматериалы',
+      Состав: 'натуральный гипоаллергенный плюш',
+      Наполнитель: 'холлофайбер, мягкое волокно',
+    },
+  },
+  {
+    id: 6,
+    name: 'Мишка с шарфом',
+    price: '10100',
+    size: '7см',
+    color: 'Серый',
+    material: 'Натуральная гипоаллергенная плюш',
+    image: bear1,
+    description:
+      'Описание: Мишка Адель сшита из искусственного меха и вискозы. Мордочка вязаная из шерсти, тонирована вручную. Платье сшито из ситца, шитьё, декорировано атласным бантом. Единственный экземпляр, размер 7 см.',
+    characteristics: {
+      Модель: 'Мишка',
+      Вес: '0.2 кг',
+      Размер: '7 см',
+      Цвет: 'Серый',
+      Свойства: 'гипоаллергенный, экоматериалы',
+      Состав: 'натуральный гипоаллергенный плюш',
+      Наполнитель: 'холлофайбер, мягкое волокно',
+    },
+  },
+  // ... другие товары
+]
+
+const isFavorite = (id) => store.getters.isFavorite(id)
+
+const toggleFavorite = (item) => {
+  store.dispatch('toggleFavorite', item)
+}
+
+const addToCart = (item) => {
+  store.dispatch('addToCart', {
+    ...item,
+    quantity: 1,
+    price: parseFloat(item.price),
+  })
+}
+</script>
+
 <style scoped>
+/* Стили остаются без изменений */
 .new-page {
   padding: 20px;
-
   max-width: 1200px;
   margin: 20px auto;
 }
@@ -117,7 +198,7 @@ import AppHeader from '@/components/header/appHeader.vue'
 
 .catalog-item {
   text-align: center;
-  width: calc(33.333% - 20px); /* 3 items per row */
+  width: calc(33.333% - 20px);
   box-sizing: border-box;
   background-color: #ffe6e6;
   border-radius: 10px;
@@ -125,10 +206,10 @@ import AppHeader from '@/components/header/appHeader.vue'
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.placeholder {
+.item-image {
   width: 100%;
   height: 300px;
-  background-color: #e0e0e0;
+  object-fit: cover;
   border: 1px solid #ddd;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -141,7 +222,13 @@ import AppHeader from '@/components/header/appHeader.vue'
   margin: 5px 0;
 }
 
-.catalog-item button {
+.learn-more-link {
+  text-decoration: none;
+  display: inline-block;
+  margin-top: 20px;
+}
+
+.learn-more {
   background-color: #ff6b6b;
   color: #fff;
   border: none;
@@ -150,10 +237,54 @@ import AppHeader from '@/components/header/appHeader.vue'
   cursor: pointer;
   border-radius: 20px;
   transition: background-color 0.3s ease;
-  margin-top: 20px;
 }
 
-.catalog-item button:hover {
+.learn-more:hover {
   background-color: #e05a5a;
+}
+
+.add-to-favorites {
+  background-color: #ff6b6b;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1em;
+  cursor: pointer;
+  border-radius: 20px;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+}
+
+.add-to-favorites:hover,
+.add-to-favorites.favorited {
+  background-color: #e05a5a;
+}
+
+.add-to-cart {
+  background-color: #ff6b6b;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1em;
+  cursor: pointer;
+  border-radius: 20px;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+}
+
+.add-to-cart:hover {
+  background-color: #e05a5a;
+}
+
+@media (max-width: 768px) {
+  .catalog-item {
+    width: calc(50% - 20px);
+  }
+}
+
+@media (max-width: 480px) {
+  .catalog-item {
+    width: 100%;
+  }
 }
 </style>

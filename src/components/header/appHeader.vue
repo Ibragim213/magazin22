@@ -1,35 +1,34 @@
 <template>
   <header>
     <div class="logo">
-      <router-link to="/"
-        ><img class="phr" src="/src//assets/img/Бирка-Photoroom 1.png" alt="Логотип Camelia"
-      /></router-link>
+      <img class="phr" src="/src/assets/img/Бирка-Photoroom 1.png" alt="Логотип Camelia" />
     </div>
     <nav>
       <ul class="logo2">
-        <li><a href="#">О нас</a></li>
-        <li>
-          <router-link to="/tovar"><a href="#">Каталог</a></router-link>
-        </li>
+        <li><router-link to="/">О нас</router-link></li>
+        <li><router-link to="/tovar">Каталог</router-link></li>
         <li><router-link to="/oplata">Доставка и оплата</router-link></li>
-        <li><a href="#">Контакты</a></li>
+        <li><router-link to="/favorites">Избранное</router-link></li>
+        <li><router-link to="/contact">Контакты</router-link></li>
+        <li><router-link to="/cart">Корзина</router-link></li>
       </ul>
     </nav>
   </header>
 </template>
+
 <style scoped>
 header {
+  background-color: #fff;
   padding: 20px;
   display: flex;
+  justify-content: space-between;
   align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .logo img {
   height: 120px;
-}
-
-.logo2 {
-  margin-left: 300px;
 }
 
 nav ul {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+
 import AppFooter from '@/components/footer/appFooter.vue'
 import AppHeader from '@/components/header/appHeader.vue'
 </script>

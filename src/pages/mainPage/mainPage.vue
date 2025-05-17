@@ -1,53 +1,3 @@
-<script setup lang="ts">
-import { ref } from 'vue'
-import AppFooter from '@/components/footer/appFooter.vue'
-import AppHeader from '@/components/header/appHeader.vue'
-
-const currentPage = ref(0)
-const pages = ref([
-  [
-    { name: 'Ежик с яблоком', price: '1200 р.' },
-    { name: 'Ежик с яблоком', price: '1200 р.' },
-    { name: 'Ежик с яблоком', price: '1200 р.' },
-    { name: 'Ежик с яблоком', price: '1200 р.' },
-    { name: 'Ежик с яблоком', price: '1200 р.' },
-    { name: 'Ежик с яблоком', price: '1200 р.' },
-  ],
-  [
-    { name: 'Заяц с морковкой', price: '1500 р.' },
-    { name: 'Заяц с морковкой', price: '1500 р.' },
-    { name: 'Заяц с морковкой', price: '1500 р.' },
-    { name: 'Заяц с морковкой', price: '1500 р.' },
-    { name: 'Заяц с морковкой', price: '1500 р.' },
-    { name: 'Заяц с морковкой', price: '1500 р.' },
-  ],
-  [
-    { name: 'Мишка с шариком', price: '1000 р.' },
-    { name: 'Мишка с шариком', price: '1000 р.' },
-    { name: 'Мишка с шариком', price: '1000 р.' },
-    { name: 'Мишка с шариком', price: '1000 р.' },
-    { name: 'Мишка с шариком', price: '1000 р.' },
-    { name: 'Мишка с шариком', price: '1000 р.' },
-  ],
-  [
-    { name: 'Лиса с вишней', price: '1000 р.' },
-    { name: 'Лиса с вишней', price: '1800 р.' },
-    { name: 'Лиса с вишней', price: '1300 р.' },
-    { name: 'Лиса с вишней', price: '1700 р.' },
-    { name: 'Лиса с вишней', price: '1100 р.' },
-    { name: 'Лиса с вишней', price: '1800 р.' },
-  ],
-])
-
-const nextPage = () => {
-  currentPage.value = (currentPage.value + 1) % pages.value.length
-}
-
-const setPage = (index) => {
-  currentPage.value = index
-}
-</script>
-
 <template>
   <AppHeader />
   <main>
@@ -69,11 +19,29 @@ const setPage = (index) => {
     <h2>Каталог</h2>
     <p>Здесь представлены лучшие товары, которые вы можете заказать, заполнив анкету.</p>
     <div class="catalog-items container">
-      <div class="catalog-item" v-for="(item, index) in pages[currentPage]" :key="index">
-        <div class="placeholder"></div>
-        <p>{{ item.name }}</p>
-        <button>{{ item.price }}</button>
-      </div>
+      <router-link
+        v-for="(item, index) in pages[currentPage]"
+        :key="index"
+        :to="{
+          name: 'ProductDetail',
+          params: { id: item.id || index },
+          query: { product: JSON.stringify(createProductObject(item, index)) },
+        }"
+        class="catalog-item-link"
+      >
+        <div
+          class="catalog-item"
+          tabindex="0"
+          @focus="onFocus(index)"
+          :class="{ focused: focusedIndex === index }"
+        >
+          <div class="placeholder">
+            <img :src="item.image" alt="Item Image" class="item-image" />
+          </div>
+          <p>{{ item.name }}</p>
+          <button>{{ item.price }}</button>
+        </div>
+      </router-link>
     </div>
     <div class="pagination">
       <button
@@ -119,6 +87,97 @@ const setPage = (index) => {
   </section>
 </template>
 
+<script setup lang="ts">
+import { ref } from 'vue'
+import AppFooter from '@/components/footer/appFooter.vue'
+import AppHeader from '@/components/header/appHeader.vue'
+
+// Импортируем изображения
+import hedgehog from '@/assets/img/hedgehog.jpg'
+import rabbit from '@/assets/img/rabbit.jpg'
+import bear from '@/assets/img/bear.jpg'
+import fox from '@/assets/img/fox.jpg'
+
+const currentPage = ref(0)
+const focusedIndex = ref(null)
+
+const pages = ref([
+  [
+    { name: 'Ежик с яблоком', price: '1200 р.', image: hedgehog },
+    { name: 'Ежик с яблоком', price: '1200 р.', image: hedgehog },
+    { name: 'Ежик с яблоком', price: '1200 р.', image: hedgehog },
+    { name: 'Ежик с яблоком', price: '1200 р.', image: hedgehog },
+    { name: 'Ежик с яблоком', price: '1200 р.', image: hedgehog },
+    { name: 'Ежик с яблоком', price: '1200 р.', image: hedgehog },
+  ],
+  [
+    { name: 'Заяц с морковкой', price: '1500 р.', image: rabbit },
+    { name: 'Заяц с морковкой', price: '1500 р.', image: rabbit },
+    { name: 'Заяц с морковкой', price: '1500 р.', image: rabbit },
+    { name: 'Заяц с морковкой', price: '1500 р.', image: rabbit },
+    { name: 'Заяц с морковкой', price: '1500 р.', image: rabbit },
+    { name: 'Заяц с морковкой', price: '1500 р.', image: rabbit },
+  ],
+  [
+    { name: 'Мишка с шариком', price: '1000 р.', image: bear },
+    { name: 'Мишка с шариком', price: '1000 р.', image: bear },
+    { name: 'Мишка с шариком', price: '1000 р.', image: bear },
+    { name: 'Мишка с шариком', price: '1000 р.', image: bear },
+    { name: 'Мишка с шариком', price: '1000 р.', image: bear },
+    { name: 'Мишка с шариком', price: '1000 р.', image: bear },
+  ],
+  [
+    { name: 'Лиса с вишней', price: '1000 р.', image: fox },
+    { name: 'Лиса с вишней', price: '1800 р.', image: fox },
+    { name: 'Лиса с вишней', price: '1300 р.', image: fox },
+    { name: 'Лиса с вишней', price: '1700 р.', image: fox },
+    { name: 'Лиса с вишней', price: '1100 р.', image: fox },
+    { name: 'Лиса с вишней', price: '1800 р.', image: fox },
+  ],
+])
+
+const createProductObject = (item, index) => {
+  return {
+    id: index + 1 + currentPage.value * 6,
+    name: item.name,
+    price: item.price.replace(' р.', ''),
+    size: '7см',
+    color: 'Серый',
+    material: 'Натуральная гипоаллергенная плюш',
+    image: item.image,
+    description:
+      'Описание: ' +
+      item.name +
+      ' сшит из искусственного меха и вискозы. Мордочка вязаная из шерсти, тонирована вручную. Единственный экземпляр, размер 7 см.',
+    characteristics: {
+      Модель: item.name.split(' ')[0],
+      Вес: '0.2 кг',
+      Размер: '7 см',
+      Цвет: 'Серый',
+      Свойства: 'гипоаллергенный, экоматериалы',
+      Состав: 'натуральный гипоаллергенный плюш',
+      Наполнитель: 'холлофайбер, мягкое волокно',
+    },
+  }
+}
+
+const nextPage = () => {
+  currentPage.value = (currentPage.value + 1) % pages.value.length
+}
+
+const setPage = (index) => {
+  currentPage.value = index
+}
+
+const onFocus = (index) => {
+  focusedIndex.value = index
+}
+
+const onBlur = () => {
+  focusedIndex.value = null
+}
+</script>
+
 <style scoped>
 .hero {
   display: flex;
@@ -150,10 +209,12 @@ const setPage = (index) => {
 }
 
 .placeholder {
-  width: 379px;
-  height: 420px;
-
+  width: 100%;
+  height: 300px;
+  border: 1px solid #ddd;
   border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -213,10 +274,17 @@ const setPage = (index) => {
   justify-content: center;
 }
 
+.catalog-item-link {
+  text-decoration: none;
+  color: inherit;
+  width: calc(33.333% - 20px);
+}
+
 .catalog-item {
   text-align: center;
-  width: calc(33.333% - 20px); /* 3 items per row */
+  width: 100%;
   box-sizing: border-box;
+  cursor: pointer;
 }
 
 .catalog-item .placeholder {
@@ -328,5 +396,22 @@ const setPage = (index) => {
   font-size: 1.25em;
   letter-spacing: -5px;
   font-family: 'Klee One';
+}
+
+/* Стили для фокусировки */
+.catalog-item.focused {
+  box-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+}
+
+@media (max-width: 768px) {
+  .catalog-item-link {
+    width: calc(50% - 20px);
+  }
+}
+
+@media (max-width: 480px) {
+  .catalog-item-link {
+    width: 100%;
+  }
 }
 </style>
