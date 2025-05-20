@@ -24,7 +24,7 @@
         :key="index"
         :to="{
           name: 'ProductDetail',
-          params: { id: item.id || index },
+      
           query: { product: JSON.stringify(createProductObject(item, index)) },
         }"
         class="catalog-item-link"
